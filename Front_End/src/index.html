@@ -1,34 +1,35 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="./output.css" rel="stylesheet" />
-  </head>
-  <body class="bg-black p-10">
-    <section class="flex flex-col items-center justify-center">
-      <div class="text-white text-5xl">AI code Reviewer</div>
-      <div>
-        <div class="text-amber-50 p-14">
-          <select>
-            <option class="text-black">Python</option>
-            <option class="text-black">JavaScript</option>
-          </select>
-        </div>
-      </div>
-      <div class="flex items-center justify-center">
-        <div>
-          <textarea
-            class="w-2xl max-w-3xl h-28 bg-white/15 rounded-3xl border-2 border-amber-300/35 text-white placeholder-white/50 focus:text-white focus:outline-none focus:ring-2 focus:ring-amber-300/50 p-4"
-            placeholder="Paste your code here" id="codeInput"></textarea>
-        </div>
-      </div>
-      <div class=" p-5">
-        <button class=" p-3 bg-amber-500  border-2 rounded-3xl text-black hover:bg-amber-300" type="submit" onclick="reviewCode()" >Review</button>
-      </div>
-      <div class="w-2xl max-w-3xl h-28 bg-white/15 rounded-3xl border-2 border-amber-300/35 text-white placeholder-white/50 focus:text-white focus:outline-none focus:ring-2 focus:ring-amber-300/50 p-4" id="result"></div>
-    </section>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="./output.css" rel="stylesheet" />
+</head>
 
-  </body>
-</html>
+<body class="bg-black p-10">
+
+<section class="flex flex-col items-center justify-center">
+
+  <div class="text-white text-5xl">AI Code Reviewer</div>
+
+  <!-- Monaco Editor -->
+  <div id="editor" style="width:400px;height:400px;border:1px solid #ccc;"></div>
+
+  <div class="p-5">
+    <button class="p-3 bg-amber-500 rounded-3xl text-black"
+      onclick="reviewCode()">
+      Review
+    </button>
+  </div>
+
+  <div id="result"
+    class="w-2xl max-w-3xl h-28 bg-white/15 rounded-3xl border-2 border-amber-300/35 text-white p-4">
+  </div>
+
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.44.0/min/vs/loader.js"></script>
 <script src="script.js"></script>
+
+</body>
+</html>

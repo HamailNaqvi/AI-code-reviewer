@@ -9,26 +9,27 @@ app.use(express.json())
 
 app.post("/review", (req, res) => {
 
-  const code = req.body.code
+    const code = req.body.code
 
-  try {
+    try {
 
-    const result = vm.runInNewContext(code)
+        // safe execution (basic JS only)
+        const result = vm.runInNewContext(code)
 
-    res.json({
-      review: "Execution result: " + result
-    })
+        res.json({
+            review: "Execution result: " + result
+        })
 
-  } catch (error) {
+    } catch (err) {
 
-    res.json({
-      review: "Error: " + error.message
-    })
+        res.json({
+            review: "Error: " + err.message
+        })
 
-  }
+    }
 
 })
 
 app.listen(3000, () => {
-  console.log("Server running on port 3000")
+    console.log("Server running on port 3000")
 })

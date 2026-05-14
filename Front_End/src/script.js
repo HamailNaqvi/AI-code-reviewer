@@ -1,19 +1,25 @@
 // Monaco editor instance
-let editor
+let editor;
 
-// Initialize Monaco
 require.config({
-  paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.44.0/min/vs' }
-})
+  paths: { vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.44.0/min/vs" }
+});
 
-require(['vs/editor/editor.main'], function () {
-  editor = monaco.editor.create(document.getElementById('editor'), {
-    value: "console.log('Hello world')",
-    language: 'javascript',
-    theme: 'vs-dark',
-    automaticLayout: true
-  })
-})
+require(["vs/editor/editor.main"], function () {
+
+  editor = monaco.editor.create(document.getElementById("editor"), {
+    value: "// Write your code here",
+    language: "javascript",
+    theme: "vs-dark",
+
+    fontSize: 16,
+    minimap: { enabled: false },
+
+    automaticLayout: true,
+    scrollBeyondLastLine: false
+  });
+
+});
 
 // Button click function
 async function reviewCode () {

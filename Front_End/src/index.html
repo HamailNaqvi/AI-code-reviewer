@@ -1,41 +1,394 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="./output.css" rel="stylesheet" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Saira+Stencil:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Saira+Stencil:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+  <style>
+    /* Only CSS Tailwind cannot express */
+    body { font-family: 'Saira Stencil', sans-serif; background:#060612; overflow-x:hidden; }
+
+    /* Gradient texts */
+    .grad-orange-purple  { background:linear-gradient(90deg,#f97316,#a78bfa); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .grad-hero           { background:linear-gradient(135deg,#fff 0%,#a78bfa 50%,#f97316 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .grad-orange-amber   { background:linear-gradient(135deg,#f97316,#fbbf24); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+
+    /* Semi-circle behind hero */
+    .semicircle-bg {
+      position:absolute; bottom:-10%; left:50%; transform:translateX(-50%);
+      width:min(900px,120vw); height:min(450px,60vw);
+      border-radius:50% 50% 0 0 / 100% 100% 0 0;
+      background:linear-gradient(180deg,rgba(99,102,241,.35) 0%,rgba(139,92,246,.25) 40%,rgba(251,146,60,.15) 100%);
+      filter:blur(60px); z-index:0; pointer-events:none;
+    }
+
+    /* Rating bar fill transition */
+    .rating-bar-fill {
+      height:100%; border-radius:9999px;
+      background:linear-gradient(90deg,#f97316,#fbbf24);
+      width:0%; transition:width 1s cubic-bezier(0.34,1.56,0.64,1);
+      box-shadow:0 0 8px rgba(249,115,22,.6);
+    }
+
+    /* Stat dot pulse-in */
+    .stat-dot { opacity:.25; transition:all .4s ease; }
+    .stat-dot.active { opacity:1; transform:scale(1.2); }
+
+    /* Monaco transparent bg */
+    .monaco-editor,.monaco-editor-background,.monaco-editor .margin { background:transparent !important; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width:5px; }
+    ::-webkit-scrollbar-track { background:transparent; }
+    ::-webkit-scrollbar-thumb { background:rgba(139,92,246,.3); border-radius:9999px; }
+
+    /* Language select arrow */
+    .lang-select {
+      appearance:none;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23a78bfa' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat:no-repeat; background-position:right 12px center;
+    }
+
+    /* Nav link hover (box-shadow + translateY combo) */
+    .nav-link { transition:all .25s ease; }
+    .nav-link:hover {
+      color:#fff;
+      background:rgba(249,115,22,.2);
+      border-color:rgba(249,115,22,.5);
+      box-shadow:0 0 16px rgba(249,115,22,.3);
+      transform:translateY(-2px);
+    }
+
+    /* Review button shimmer overlay + hover glow */
+    .review-btn { transition:all .25s ease; }
+    .review-btn::before {
+      content:''; position:absolute; inset:0;
+      background:linear-gradient(135deg,rgba(255,255,255,.12),transparent);
+      border-radius:inherit;
+    }
+    .review-btn:hover {
+      transform:translateY(-3px) scale(1.03);
+      box-shadow:0 0 40px rgba(249,115,22,.65),0 8px 24px rgba(0,0,0,.5);
+    }
+    .review-btn:active { transform:scale(0.98); }
+
+    /* Sidebar card hover */
+    .sidebar-card { transition:border-color .3s ease, box-shadow .3s ease; }
+    .sidebar-card:hover {
+      border-color:rgba(249,115,22,.35);
+      box-shadow:0 4px 32px rgba(0,0,0,.4),0 0 20px rgba(249,115,22,.08),inset 0 1px 0 rgba(255,255,255,.05);
+    }
+
+    /* Clamp hero font so it scales perfectly across all screen widths */
+    .hero-title { font-size:clamp(2rem,7vw,5rem); }
+  </style>
 </head>
 
-<body class="bg-black p-10">
+<body class="min-h-screen overflow-x-hidden">
 
-<section class="flex flex-col items-center justify-center">
+  <!-- ══════════════════════════════════════
+       STICKY NAV
+  ══════════════════════════════════════ -->
+  <nav class="
+    fixed top-0 left-0 right-0 z-50
+    flex items-center justify-between
+    px-4 sm:px-8 lg:px-12
+    py-3 sm:py-4
+    bg-[rgba(6,6,18,0.60)] backdrop-blur-2xl
+    border-b border-violet-500/15
+    shadow-[0_4px_40px_rgba(0,0,0,0.4)]
+  ">
+    <!-- Logo -->
+    <span class="grad-orange-purple text-xl sm:text-2xl font-black tracking-widest select-none">
+      ZIPTAG
+    </span>
 
-  <div class="text-white font-saira text-5xl p-10">AI Code Reviewer</div>
+    <!-- Desktop links -->
+    <div class="hidden sm:flex items-center gap-2 md:gap-3">
+      <a href="#review"
+         class="nav-link text-white/70 no-underline text-xs sm:text-sm tracking-wider
+                px-4 py-1.5 rounded-full
+                border border-white/10 bg-white/5 backdrop-blur-md cursor-pointer">
+        Review
+      </a>
+      <a href="#about"
+         class="nav-link text-white/70 no-underline text-xs sm:text-sm tracking-wider
+                px-4 py-1.5 rounded-full
+                border border-white/10 bg-white/5 backdrop-blur-md cursor-pointer">
+        About Us
+      </a>
+      <a href="#how"
+         class="nav-link text-white/70 no-underline text-xs sm:text-sm tracking-wider
+                px-4 py-1.5 rounded-full
+                border border-white/10 bg-white/5 backdrop-blur-md cursor-pointer">
+        How it works
+      </a>
+    </div>
 
-<div
-  id="editor"
-  class=" w-2xl min-h-32 max-h-auto border-2 border-amber-400/40 rounded-xl shadow-[0_0_20px_rgba(251,191,36,0.2)] overflow-hidden">
-</div>
-
-
-  <div class="p-5">
-    <button class="p-3 font-saira bg-amber-500 rounded-2xl text-black"
-      onclick="reviewCode()">
-      Review
+    <!-- Mobile burger -->
+    <button class="sm:hidden flex flex-col justify-center gap-1.5 w-9 h-9
+                   rounded-lg border border-white/10 bg-white/5 backdrop-blur-md
+                   items-center">
+      <span class="w-5 h-px bg-white/70 rounded-full block"></span>
+      <span class="w-5 h-px bg-white/70 rounded-full block"></span>
+      <span class="w-3 h-px bg-white/70 rounded-full block"></span>
     </button>
-  </div>
+  </nav>
 
-  <div id="result"
-    class="w-2xl max-w-3xl h-auto min-h-32 bg-white/15 rounded-3xl border-2 border-amber-300/35 text-white p-4">
-  </div>
 
-</section>
+  <!-- ══════════════════════════════════════
+       HERO SECTION
+  ══════════════════════════════════════ -->
+  <section class="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-20 sm:pt-24 px-4">
 
-<script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.44.0/min/vs/loader.js"></script>
-<script src="script.js"></script>
+    <!-- Ambient orb — left -->
+    <div class="
+      absolute top-[10%] left-[-5%]
+      w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96
+      rounded-full pointer-events-none z-0 blur-2xl
+      bg-[radial-gradient(circle,rgba(99,102,241,0.22)_0%,transparent_70%)]
+    "></div>
 
+    <!-- Ambient orb — right -->
+    <div class="
+      absolute top-[5%] right-[-5%]
+      w-56 h-56 sm:w-72 sm:h-72 md:w-96 md:h-96
+      rounded-full pointer-events-none z-0 blur-2xl
+      bg-[radial-gradient(circle,rgba(249,115,22,0.18)_0%,transparent_70%)]
+    "></div>
+
+    <!-- Semi-circle glow — z-0, behind everything -->
+    <div class="semicircle-bg"></div>
+
+    <!-- Hero copy — z-10 -->
+    <div class="relative z-10 flex flex-col items-center text-center mb-6 sm:mb-8">
+      <h1 class="hero-title grad-hero mb-3">
+        Meet Ziptag
+      </h1>
+      <p class="text-[rgba(200,200,255,0.75)] text-sm sm:text-base md:text-lg tracking-widest font-light m-0">
+        AI that perfects your code like a team of developers
+      </p>
+    </div>
+
+    <!-- Editor glass card — z-10 -->
+    <div class="
+      relative z-10
+      w-full max-w-lg sm:max-w-xl md:max-w-2xl lg:max-w-3xl xl:max-w-4xl
+      rounded-2xl overflow-hidden
+      bg-[rgba(10,10,25,0.70)] backdrop-blur-xl
+      border border-orange-400/35
+      shadow-[0_0_0_1px_rgba(139,92,246,0.1),0_8px_40px_rgba(0,0,0,0.5),0_0_60px_rgba(249,115,22,0.08)]
+    ">
+      <div id="editor" class="w-full min-h-30 sm:min-h-40 md:min-h-50"></div>
+    </div>
+
+    <!-- Review button — z-10 -->
+    <div class="relative z-10 pt-5 pb-2">
+      <button
+        onclick="reviewCode()"
+        class="review-btn relative overflow-hidden
+               text-sm sm:text-base tracking-widest
+               px-8 sm:px-10 py-3 sm:py-3.5
+               rounded-xl border-none cursor-pointer text-white font-bold
+               bg-linear-to-br from-orange-600 to-orange-800
+               shadow-[0_0_24px_rgba(249,115,22,0.45),0_4px_16px_rgba(0,0,0,0.4)]">
+        ⚡ Review Code
+      </button>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════
+       RESULTS SECTION
+  ══════════════════════════════════════ -->
+  <section id="review" class="relative z-10 px-4 sm:px-6 lg:px-10 pb-16 sm:pb-24">
+
+    <!--
+      Layout:
+        mobile  (< lg)  → column: result box full width, sidebar is 2-col grid below
+        desktop (>= lg) → row: result box flex-1, sidebar fixed-width column on right
+    -->
+    <div class="
+      flex flex-col lg:flex-row
+      gap-4 lg:gap-5
+      w-full
+      max-w-sm sm:max-w-2xl md:max-w-3xl lg:max-w-5xl xl:max-w-6xl 2xl:max-w-7xl
+      mx-auto items-start
+    ">
+
+      <!-- Main result box -->
+      <div id="result"
+           class="
+             flex-1 w-full min-h-45
+             bg-[rgba(10,10,25,0.65)] backdrop-blur-xl
+             rounded-2xl
+             border border-violet-500/25
+             shadow-[0_0_0_1px_rgba(249,115,22,0.08),0_8px_40px_rgba(0,0,0,0.4),0_0_60px_rgba(99,102,241,0.08)]
+             p-5 sm:p-6 lg:p-7
+             text-[rgba(220,220,255,0.9)] font-sans text-sm sm:text-base leading-relaxed
+             overflow-hidden
+           ">
+        <!-- Placeholder -->
+        <div class="flex flex-col items-center justify-center min-h-45 opacity-35 gap-3">
+          <svg class="w-10 h-10 stroke-violet-400" viewBox="0 0 24 24" fill="none"
+               stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 18 22 12 16 6"/>
+            <polyline points="8 6 2 12 8 18"/>
+          </svg>
+          <p class="text-violet-400 font-sans text-xs sm:text-sm m-0 text-center">
+            Submit your code above to receive a detailed review
+          </p>
+        </div>
+      </div>
+
+      <!-- ── Sidebar ── -->
+      <!--
+        mobile:  2-column grid, full width
+        sm/md:   4-column grid (all cards in one row)
+        lg+:     single column stack, fixed width
+      -->
+      <aside class="
+        w-full lg:w-56 xl:w-60 flex-shrink-
+        grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-1
+        gap-3 lg:gap-3.5
+      ">
+
+        <!-- 1 · Language Selector — spans both cols on mobile, 2 on sm -->
+        <div class="sidebar-card
+                    col-span-2 sm:col-span-2 lg:col-span-1
+                    bg-[rgba(10,10,28,0.72)] backdrop-blur-xl
+                    rounded-xl border border-violet-500/25
+                    shadow-[0_4px_24px_rgba(0,0,0,0.35),inset_0_1px_0_rgba(255,255,255,0.05)]
+                    p-4">
+          <div class="text-[0.6rem] tracking-[0.14em] uppercase text-violet-400/80 mb-2.5">
+            Language
+          </div>
+          <select id="langSelect"
+                  onchange="changeLanguage(this.value)"
+                  class="lang-select w-full
+                         bg-white/5 border border-violet-500/30
+                         rounded-lg text-white text-sm
+                         px-3 py-2 pr-8 outline-none cursor-pointer
+                         focus:border-orange-500/50 transition-colors duration-200">
+            <option class="bg-[#0f0f1e]" value="javascript">JavaScript</option>
+            <option class="bg-[#0f0f1e]" value="typescript">TypeScript</option>
+            <option class="bg-[#0f0f1e]" value="python">Python</option>
+            <option class="bg-[#0f0f1e]" value="java">Java</option>
+            <option class="bg-[#0f0f1e]" value="cpp">C++</option>
+            <option class="bg-[#0f0f1e]" value="csharp">C#</option>
+            <option class="bg-[#0f0f1e]" value="go">Go</option>
+            <option class="bg-[#0f0f1e]" value="rust">Rust</option>
+            <option class="bg-[#0f0f1e]" value="php">PHP</option>
+            <option class="bg-[#0f0f1e]" value="ruby">Ruby</option>
+            <option class="bg-[#0f0f1e]" value="swift">Swift</option>
+            <option class="bg-[#0f0f1e]" value="kotlin">Kotlin</option>
+            <option class="bg-[#0f0f1e]" value="html">HTML</option>
+            <option class="bg-[#0f0f1e]" value="css">CSS</option>
+            <option class="bg-[#0f0f1e]" value="sql">SQL</option>
+          </select>
+        </div>
+
+        <!-- 2 · Code Quality Rating — spans both cols on mobile, 2 on sm -->
+        <div class="sidebar-card
+                    col-span-2 sm:col-span-2 lg:col-span-1
+                    bg-[rgba(10,10,28,0.72)] backdrop-blur-xl
+                    rounded-xl border border-violet-500/25
+                    shadow-[0_4px_24px_rgba(0,0,0,0.35),inset_0_1px_0_rgba(255,255,255,0.05)]
+                    p-4">
+          <div class="text-[0.6rem] tracking-[0.14em] uppercase text-violet-400/80 mb-2">
+            Code Quality
+          </div>
+          <div id="sidebarRating" class="grad-orange-amber text-4xl font-black leading-none">—</div>
+          <div class="mt-2.5 h-1.5 rounded-full bg-white/8 overflow-hidden">
+            <div id="ratingBar" class="rating-bar-fill"></div>
+          </div>
+          <div id="ratingLabel" class="mt-1.5 text-[0.68rem] text-[rgba(200,200,255,0.45)] font-sans">
+            Awaiting review…
+          </div>
+        </div>
+
+        <!-- 3 · Bugs Found — 1 col on mobile, 1 on sm, 1 on lg -->
+        <div class="sidebar-card
+                    col-span-1 lg:col-span-1
+                    bg-[rgba(10,10,28,0.72)] backdrop-blur-xl
+                    rounded-xl border border-violet-500/25
+                    shadow-[0_4px_24px_rgba(0,0,0,0.35),inset_0_1px_0_rgba(255,255,255,0.05)]
+                    p-4">
+          <div class="text-[0.6rem] tracking-[0.14em] uppercase text-violet-400/80 mb-2">
+            Bugs Found
+          </div>
+          <div id="bugsCount" class="text-red-400 text-4xl font-black leading-none">—</div>
+          <div id="bugDots" class="flex flex-wrap gap-1 mt-2.5"></div>
+        </div>
+
+        <!-- 4 · Improvements — 1 col on mobile, 1 on sm, 1 on lg -->
+        <div class="sidebar-card
+                    col-span-1 lg:col-span-1
+                    bg-[rgba(10,10,28,0.72)] backdrop-blur-xl
+                    rounded-xl border border-violet-500/25
+                    shadow-[0_4px_24px_rgba(0,0,0,0.35),inset_0_1px_0_rgba(255,255,255,0.05)]
+                    p-4">
+          <div class="text-[0.6rem] tracking-[0.14em] uppercase text-violet-400/80 mb-2">
+            Improvements
+          </div>
+          <div id="improvementsCount" class="text-emerald-400 text-4xl font-black leading-none">—</div>
+          <div id="improvementDots" class="flex flex-wrap gap-1 mt-2.5"></div>
+        </div>
+
+      </aside>
+    </div>
+  </section>
+
+
+  <!-- External scripts — untouched, backend-safe -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.44.0/min/vs/loader.js"></script>
+  <script src="script.js"></script>
+
+  <!-- Sidebar helpers: call updateSidebar() from script.js after backend responds -->
+  <script>
+    function updateSidebar({ rating, bugs, improvements }) {
+      if (rating != null) {
+        const r = parseFloat(rating);
+        document.getElementById('sidebarRating').textContent = r.toFixed(1) + '/10';
+        document.getElementById('ratingBar').style.width = (r * 10) + '%';
+        const labels = ['Needs work', 'Fair', 'Average', 'Good', 'Great', 'Excellent'];
+        document.getElementById('ratingLabel').textContent = labels[Math.min(Math.floor(r / 2), 5)];
+      }
+      if (bugs != null) {
+        document.getElementById('bugsCount').textContent = bugs;
+        const bugDots = document.getElementById('bugDots');
+        bugDots.innerHTML = '';
+        for (let i = 0; i < Math.min(bugs, 12); i++) {
+          const d = document.createElement('div');
+          d.className = 'stat-dot w-2 h-2 rounded-full bg-red-400 shadow-[0_0_6px_#f87171]';
+          bugDots.appendChild(d);
+          setTimeout(() => d.classList.add('active'), i * 80);
+        }
+      }
+      if (improvements != null) {
+        document.getElementById('improvementsCount').textContent = improvements;
+        const impDots = document.getElementById('improvementDots');
+        impDots.innerHTML = '';
+        for (let i = 0; i < Math.min(improvements, 12); i++) {
+          const d = document.createElement('div');
+          d.className = 'stat-dot w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_6px_#34d399]';
+          impDots.appendChild(d);
+          setTimeout(() => d.classList.add('active'), i * 80);
+        }
+      }
+    }
+
+    function changeLanguage(lang) {
+      if (window._monacoEditor && window.monaco) {
+        const model = window._monacoEditor.getModel();
+        if (model) window.monaco.editor.setModelLanguage(model, lang);
+      }
+    }
+  </script>
 </body>
 </html>

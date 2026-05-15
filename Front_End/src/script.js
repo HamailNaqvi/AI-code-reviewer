@@ -35,5 +35,7 @@ async function reviewCode () {
 
   const data = await response.json()
 
-  document.getElementById('result').innerText = data.review
+  document.getElementById('result').innerHTML = marked.parse(data.review);
+  document.getElementById('result').style.color = "white";
+  document.getElementById('result').style.padding="5px";
 }

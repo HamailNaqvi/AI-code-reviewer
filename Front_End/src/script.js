@@ -38,4 +38,8 @@ async function reviewCode () {
   document.getElementById('result').innerHTML = marked.parse(data.review);
   document.getElementById('result').style.color = "white";
   document.getElementById('result').style.padding="5px";
+  document.getElementById('bugsCount').innerText = data.bugs;
+  document.getElementById('improvementsCount').innerText= data.improvements;
+  document.getElementById('sidebarRating').innerText= data.rating;
+  document.getElementById('ratingBar').innerText= data.ratinginpercentage;
 }

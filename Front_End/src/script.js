@@ -41,6 +41,7 @@ async function reviewCode () {
   document.getElementById('bugsCount').innerText = data.bugs;
   document.getElementById('improvementsCount').innerText= data.improvements;
   document.getElementById('sidebarRating').innerText= data.rating;
+  document.getElementById('UIUX').innerHTML = marked.parse(data.UIUX);
   // document.getElementById('ratingBar').innerText= data.ratinginpercentage;
 
 

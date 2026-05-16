@@ -41,5 +41,45 @@ async function reviewCode () {
   document.getElementById('bugsCount').innerText = data.bugs;
   document.getElementById('improvementsCount').innerText= data.improvements;
   document.getElementById('sidebarRating').innerText= data.rating;
-  document.getElementById('ratingBar').innerText= data.ratinginpercentage;
+  // document.getElementById('ratingBar').innerText= data.ratinginpercentage;
+
+
+  function updateSidebar({ rating, bugs, improvements }) {
+      if (rating != null) {
+        const r = parseFloat(rating);
+        document.getElementById('sidebarRating').textContent = r.toFixed(1) + '/10';
+        document.getElementById('ratingBar').style.width = (r * 10) + '%';
+        const labels = ['Needs work', 'Fair', 'Average', 'Good', 'Great', 'Excellent'];
+        document.getElementById('ratingLabel').textContent = labels[Math.min(Math.floor(r / 2), 5)];
+      }
+      if (bugs != null) {
+        document.getElementById('bugsCount').textContent = bugs;
+        const bugDots = document.getElementById('bugDots');
+        bugDots.innerHTML = '';
+        for (let i = 0; i < Math.min(bugs, 12); i++) {
+          const d = document.createElement('div');
+          d.className = 'stat-dot w-2 h-2 rounded-full bg-red-400 shadow-[0_0_6px_#f87171]';
+          bugDots.appendChild(d);
+          setTimeout(() => d.classList.add('active'), i * 80);
+        }
+      }
+      if (improvements != null) {
+        document.getElementById('improvementsCount').textContent = improvements;
+        const impDots = document.getElementById('improvementDots');
+        impDots.innerHTML = '';
+        for (let i = 0; i < Math.min(improvements, 12); i++) {
+          const d = document.createElement('div');
+          d.className = 'stat-dot w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_6px_#34d399]';
+          impDots.appendChild(d);
+          setTimeout(() => d.classList.add('active'), i * 80);
+        }
+      }
+    }
+
+    function changeLanguage(lang) {
+      if (window._monacoEditor && window.monaco) {
+        const model = window._monacoEditor.getModel();
+        if (model) window.monaco.editor.setModelLanguage(model, lang);
+      }
+    }
 }

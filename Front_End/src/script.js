@@ -36,13 +36,14 @@ async function reviewCode () {
   const data = await response.json()
 
   document.getElementById('result').innerHTML = marked.parse(data.review);
-  document.getElementById('result').style.color = "white";
-  document.getElementById('result').style.padding="5px";
+  // document.getElementById('result').style.color = "white";
+  // document.getElementById('result').style.padding="5px";
   document.getElementById('bugsCount').innerText = data.bugs;
   document.getElementById('improvementsCount').innerText= data.improvements;
   document.getElementById('sidebarRating').innerText= data.rating;
   document.getElementById('UIUX').innerHTML = marked.parse(data.UIUX);
   // document.getElementById('ratingBar').innerText= data.ratinginpercentage;
+  document.getElementById('ratingLabel').innerHTML = data.ratinglable;
 
 
   function updateSidebar({ rating, bugs, improvements }) {

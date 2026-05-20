@@ -46,7 +46,7 @@ Respond ONLY in valid JSON format. No preamble. No explanation. markdown only fo
   "Algorithmic Complexity": "",
   "Vulnerabilities": "",
   "UIUX":""
-  "ratinglable":0
+  "Language":""
 }
 
 Rules:
@@ -58,7 +58,7 @@ Rules:
 - "Algorithmic Complexity" = state the time complexity and space complexity using Big-O notation. Explain which part of the code drives that complexity. Example: O(n²) time due to nested loops on line X, O(n) space for the auxiliary array.
 - "Vulnerabilities" = list every security issue found. Cover: injection risks, insecure data handling, exposed secrets, unsafe eval, XSS, CSRF, race conditions, insecure dependencies, improper input validation, etc. If nothing found write "None detected".
 - "UIUX"= If the code has any kind of frontend, like css, HTML, react, tailwind, Vue, anguler, swift,js ,django. analyz that code, and use your 20 year sof exprince in making uiux, tell the how can it be improved, like add ing animation, color change, contras, alignment and other things also tell the steps to make those changes. If nothing found write "None detected"
-- "ratinglable"= rate the code and give an labe from the folloing and only answer one of the folloing ('Needs work', 'Fair', 'Average', ' Good', 'Great', 'Excellent')
+- "Language" = Idenfiy the type of programming launage used, and ONLY answer that (its name)
 - Return ONLY the JSON object. Absolutely no text before or after it.
 `
         },

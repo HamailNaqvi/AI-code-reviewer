@@ -212,13 +212,13 @@
 
     <!-- Editor glass card -->
     <div class="relative z-10 w-full max-w-lg sm:max-w-xl md:max-w-2xl lg:max-w-3xl xl:max-w-4xl rounded-2xl overflow-hidden bg-[rgba(10,10,25,0.70)] backdrop-blur-xl border border-orange-400/35 shadow-[0_0_0_1px_rgba(139,92,246,0.1),0_8px_40px_rgba(0,0,0,0.5),0_0_60px_rgba(249,115,22,0.08)]">
-      <div id="editor" class="w-full min-h-[120px] sm:min-h-[160px] md:min-h-[200px]"></div>
+      <div id="editor" class="w-full min-h-30 sm:min-h-40 md:min-h-50"></div>
     </div>
 
     <!-- Review button -->
     <div class="relative z-10 pt-5 pb-2">
       <button id="reviewBtn" onclick="reviewCode()"
-        class="review-btn relative overflow-hidden text-sm sm:text-base tracking-widest px-8 sm:px-10 py-3 sm:py-3.5 rounded-xl border-none cursor-pointer text-white font-bold bg-gradient-to-br from-orange-600 to-orange-800 shadow-[0_0_24px_rgba(249,115,22,0.45),0_4px_16px_rgba(0,0,0,0.4)]">
+        class="review-btn relative overflow-hidden text-sm sm:text-base tracking-widest px-8 sm:px-10 py-3 sm:py-3.5 rounded-xl border-none cursor-pointer text-white font-bold bg-linear-to-br from-orange-600 to-orange-800 shadow-[0_0_24px_rgba(249,115,22,0.45),0_4px_16px_rgba(0,0,0,0.4)]">
         <span id="btnText">⚡ Review Code</span>
       </button>
     </div>
@@ -258,6 +258,13 @@
           <div id="infoImprovementDots" class="flex flex-wrap gap-1 mt-2"></div>
         </div>
 
+        <!-- Threats -->
+        <div class="info-card bg-[rgba(10,10,28,0.72)] backdrop-blur-xl rounded-xl border border-violet-500/25 shadow-[0_4px_24px_rgba(0,0,0,0.35),inset_0_1px_0_rgba(255,255,255,0.05)] p-3 sm:p-4 flex flex-col gap-1">
+          <div class="text-[0.6rem] tracking-[0.14em] uppercase text-violet-400/80">Threats</div>
+          <div id="numberOfThreats" class="text-emerald-400 text-3xl sm:text-4xl leading-none mt-1">—</div>
+          <div id="numberOfThreatsDots" class="flex flex-wrap gap-1 mt-2"></div>
+        </div>
+
       </div>
     </div>
     <!-- end INFO BAR -->
@@ -267,11 +274,11 @@
   <!-- ══════════════════════════════════════
        RESULTS SECTION
   ══════════════════════════════════════ -->
-  <section id="review" class="relative z-10 px-4 sm:px-6 lg:px-10 pb-16 sm:pb-24">
+  <section id="review" class="relative z-10 py-2 px-4 sm:px-6 lg:px-10 pb-16 sm:pb-24">
     <div class="flex flex-col gap-4 lg:gap-5 w-full max-w-sm sm:max-w-2xl md:max-w-3xl lg:max-w-5xl xl:max-w-6xl 2xl:max-w-7xl mx-auto items-start">
 
       <!-- Main result box (with loading overlay) -->
-      <div class="relative w-full">
+      <div class="relative w-full space-y-4">
         <!-- Loading overlay -->
         <div id="loadingOverlay">
           <div class="spinner-ring"></div>
@@ -282,8 +289,8 @@
         </div>
 
         <div id="result"
-          class="w-full min-h-[180px] bg-[rgba(10,10,25,0.65)] backdrop-blur-xl rounded-2xl border border-violet-500/25 shadow-[0_0_0_1px_rgba(249,115,22,0.08),0_8px_40px_rgba(0,0,0,0.4),0_0_60px_rgba(99,102,241,0.08)] p-5 sm:p-6 lg:p-7 text-[rgba(220,220,255,0.9)] font-sans text-sm sm:text-base leading-relaxed overflow-hidden">
-          <div class="flex flex-col items-center justify-center min-h-[180px] opacity-35 gap-3">
+          class="w-full min-h-45 bg-[rgba(10,10,25,0.65)] backdrop-blur-xl rounded-2xl border border-violet-500/25 shadow-[0_0_0_1px_rgba(249,115,22,0.08),0_8px_40px_rgba(0,0,0,0.4),0_0_60px_rgba(99,102,241,0.08)] p-5 sm:p-6 lg:p-7 text-[rgba(220,220,255,0.9)] font-sans text-sm sm:text-base leading-relaxed overflow-hidden">
+          <div class="flex flex-col items-center justify-center min-h-45 opacity-35 gap-3">
             <svg class="w-10 h-10 stroke-violet-400" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="16 18 22 12 16 6" />
               <polyline points="8 6 2 12 8 18" />
@@ -293,12 +300,12 @@
             </p>
           </div>
         </div>
-      </div>
+        
 
-      <!-- UIUX box -->
-      <div id="UIUX"
-        class="w-full min-h-[180px] bg-[rgba(10,10,25,0.65)] backdrop-blur-xl rounded-2xl border border-violet-500/25 shadow-[0_0_0_1px_rgba(249,115,22,0.08),0_8px_40px_rgba(0,0,0,0.4),0_0_60px_rgba(99,102,241,0.08)] p-5 sm:p-6 lg:p-7 text-[rgba(220,220,255,0.9)] font-sans text-sm sm:text-base leading-relaxed overflow-hidden">
-        <div class="flex flex-col items-center justify-center min-h-[180px] opacity-35 gap-3">
+        <div id="UIUX"
+        class="w-full min-h-45 bg-[rgba(10,10,25,0.65)] backdrop-blur-xl rounded-2xl border border-violet-500/25 shadow-[0_0_0_1px_rgba(249,115,22,0.08),0_8px_40px_rgba(0,0,0,0.4),0_0_60px_rgba(99,102,241,0.08)] p-5 sm:p-6 lg:p-7 text-[rgba(220,220,255,0.9)] font-sans text-sm sm:text-base leading-relaxed overflow-hidden">
+    
+        <div class="flex flex-col items-center justify-center min-h-45 opacity-35 gap-3">
           <svg class="w-10 h-10 stroke-violet-400" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="16 18 22 12 16 6" />
             <polyline points="8 6 2 12 8 18" />
@@ -307,7 +314,13 @@
             Submit your code above to receive a detailed UI/UX review
           </p>
         </div>
+        </div>
       </div>
+
+
+
+      <!-- UIUX box -->
+
 
     </div>
   </section>

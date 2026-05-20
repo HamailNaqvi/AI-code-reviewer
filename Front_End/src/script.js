@@ -38,7 +38,7 @@ function setLoading(on) {
 }
 
 // ── Info-bar updater (Language, Rating, Bugs, Improvements) ─────────────────
-function updateInfoBar({ rating, bugs, improvements, language }) {
+function updateInfoBar({ rating, bugs, improvements, language, threats }) {
 
   // — Language badge —
   if (language != null && language !== "") {
@@ -57,6 +57,20 @@ function updateInfoBar({ rating, bugs, improvements, language }) {
     requestAnimationFrame(() => {
       document.getElementById("infoRatingBar").style.width = (r * 10) + "%";
     });
+  }
+
+  // // -Threats-
+
+  if (threats != null){
+    document.getElementById("numberOfThreats").textContent = threats;
+    const threatsDots = document.getElementById("numberOfThreatsDots");
+    threatsDots.innerHTML="";
+    for (let i = 0; i < Math.min(threats, 12); i++) {
+      const d = document.createElement("div");
+      d.className = "stat-dot w-2 h-2 rounded-full bg-red-400 shadow-[0_0_6px_#f87171]";
+      threatsDots.appendChild(d);
+      setTimeout(() => d.classList.add("active"), i * 80);
+    }
   }
 
   // — Bugs —
@@ -107,10 +121,9 @@ async function reviewCode() {
 
     const data = await response.json();
 
-    // — Fill result box —
     document.getElementById("result").innerHTML = marked.parse(data.review ?? "");
 
-    // — Fill UIUX box —
+
     document.getElementById("UIUX").innerHTML = marked.parse(data.UIUX ?? "");
 
     // — Update info bar with AI-detected language + stats —
@@ -118,6 +131,7 @@ async function reviewCode() {
       rating:       data.rating,
       bugs:         data.bugs,
       improvements: data.improvements,
+      threats:      data.nVulnerabilities,
       language:     data.Language   // comes back from your JSON
     });
 

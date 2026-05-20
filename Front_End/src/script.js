@@ -38,7 +38,7 @@ function setLoading(on) {
 }
 
 // ── Info-bar updater (Language, Rating, Bugs, Improvements) ─────────────────
-function updateInfoBar({ rating, bugs, improvements, language, threats }) {
+function updateInfoBar({ rating, bugs, improvements, language, threats, readings }) {
 
   // — Language badge —
   if (language != null && language !== "") {
@@ -67,7 +67,7 @@ function updateInfoBar({ rating, bugs, improvements, language, threats }) {
     threatsDots.innerHTML="";
     for (let i = 0; i < Math.min(threats, 12); i++) {
       const d = document.createElement("div");
-      d.className = "stat-dot w-2 h-2 rounded-full bg-red-400 shadow-[0_0_6px_#f87171]";
+      d.className = "stat-dot w-2 h-2 rounded-full bg-red-800 shadow-[0_0_6px_#f87171]";
       threatsDots.appendChild(d);
       setTimeout(() => d.classList.add("active"), i * 80);
     }
@@ -84,6 +84,18 @@ function updateInfoBar({ rating, bugs, improvements, language, threats }) {
       bugDots.appendChild(d);
       setTimeout(() => d.classList.add("active"), i * 80);
     }
+  }
+
+
+    // — Reading Score —
+
+      if (readings != null) {
+    const r = parseFloat(readings);
+    document.getElementById("inforeading").textContent = r.toFixed(1) + "/10";
+    // animate bar on next frame so CSS transition fires
+    requestAnimationFrame(() => {
+      document.getElementById("inforeadingBar").style.width = (r * 10) + "%";
+    });
   }
 
   // — Improvements —
@@ -122,8 +134,7 @@ async function reviewCode() {
     const data = await response.json();
 
     document.getElementById("result").innerHTML = marked.parse(data.review ?? "");
-
-
+    document.getElementById("Security").innerHTML = marked.parse(data.Vulnerabilities ?? "");
     document.getElementById("UIUX").innerHTML = marked.parse(data.UIUX ?? "");
 
     // — Update info bar with AI-detected language + stats —
@@ -132,6 +143,7 @@ async function reviewCode() {
       bugs:         data.bugs,
       improvements: data.improvements,
       threats:      data.nVulnerabilities,
+      readings:     data.Readability,
       language:     data.Language   // comes back from your JSON
     });
 

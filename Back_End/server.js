@@ -42,7 +42,7 @@ Respond ONLY in valid JSON format. No preamble. No explanation. markdown only fo
   "bugs": 0,
   "improvements": 0,
   "review": "",
-  "Readability": "",
+  "Readability": 0,
   "Algorithmic Complexity": "",
   "nVulnerabilities": 0,
   "Vulnerabilities": "",

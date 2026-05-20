@@ -7,7 +7,7 @@ require.config({
 
 require(["vs/editor/editor.main"], function () {
   editor = monaco.editor.create(document.getElementById("editor"), {
-    value: "print('Testing')",
+    value: "Write your code here",
     language: "python",
     theme: "vs-dark",
     fontSize: 16,

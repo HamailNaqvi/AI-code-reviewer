@@ -125,7 +125,7 @@ async function reviewCode() {
   setLoading(true);
 
   try {
-    const response = await fetch("http://localhost:3000/review", {
+    const response = await fetch("https://ai-code-reviewer-apol.onrender.com/review", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ code })
